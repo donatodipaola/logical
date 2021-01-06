@@ -7,7 +7,18 @@ _numberOfColumns (numberOfColumns)
 {
   _data.resize(_numberOfRows*_numberOfColumns);
 }
-    
+
+BoolMatrix::BoolMatrix (uint8_t numberOfRows,uint8_t numberOfColumns, const std::vector<bool>& data) : 
+_numberOfRows (numberOfRows), 
+_numberOfColumns (numberOfColumns),
+_data(data)
+{
+  if(_numberOfRows*_numberOfColumns != _data.size())
+  {
+    throw std::out_of_range("Matrix indices and the data vector are not compatible");
+  }
+}
+
 BoolMatrix::BoolMatrix(const std::initializer_list<std::initializer_list<bool>>& matrixAsList) 
 {
   _numberOfRows = matrixAsList.size();
