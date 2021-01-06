@@ -13,6 +13,12 @@ std::ostream& operator<< (std::ostream &os, const BoolMatrix& iMatrix)
     return os;
 }
 
+bool operator== (const BoolMatrix& iLeftHand, const BoolMatrix& iRightHand) 
+{
+    return  (iLeftHand.rows() == iRightHand.rows()) and
+            (iLeftHand.cols() == iRightHand.cols()) and
+            (iLeftHand.data() == iRightHand.data());
+}
 
 
 int main() {
@@ -24,6 +30,14 @@ int main() {
     
     BoolMatrix C(3,3,{1,0,1,0,0,0,1,1,1});
     std::cout << C << std::endl;
+    
+    BoolMatrix D(C);
+    std::cout << D << std::endl;
+    
+    if (D==C)
+    {
+        std::cout << "Equal" << std::endl;
+    }
     
     return 0;
 }
