@@ -28,7 +28,14 @@ BoolMatrix::BoolMatrix(const std::initializer_list<std::initializer_list<bool>>&
     std::copy(row.begin(), row.end(), std::back_inserter(_data));
   }
 }
-    
+
+BoolMatrix::BoolMatrix(const BoolMatrix& iMatrix) 
+{
+  _numberOfRows = iMatrix._numberOfRows;
+  _numberOfColumns = iMatrix._numberOfColumns;
+  _data = iMatrix._data;
+};
+
 uint8_t BoolMatrix::rows() const
 {
   return _numberOfRows;
