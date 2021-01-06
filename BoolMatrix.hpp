@@ -6,7 +6,8 @@ public:
   BoolMatrix (uint8_t numberOfRows,uint8_t numberOfColumns);
   BoolMatrix (uint8_t numberOfRows,uint8_t numberOfColumns, const std::vector<bool>& data); 
   explicit BoolMatrix(const std::initializer_list<std::initializer_list<bool>>& initializationList);
-    
+  BoolMatrix(const BoolMatrix& iMatrix) 
+  
   uint8_t rows() const;
   uint8_t cols() const;
     
