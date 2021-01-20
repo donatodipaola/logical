@@ -1,6 +1,6 @@
 
 #include <vector>
-#include <iostream>
+#include <ostream>
 
 
 namespace boolmat {
@@ -8,24 +8,32 @@ namespace boolmat {
 class Matrix
 {
 public:
-  Matrix (uint8_t numberOfRows,uint8_t numberOfColumns);
-  Matrix (uint8_t numberOfRows,uint8_t numberOfColumns, const std::vector<bool>& data); 
-  explicit Matrix(const std::initializer_list<std::initializer_list<bool>>& initializationList);
-  Matrix(const Matrix& matrix);
-  
+  Matrix(const uint8_t rows, const uint8_t cols);
+  Matrix(const uint8_t rows, const uint8_t cols, const std::vector<bool>& data); 
+  Matrix(const Matrix& rhs);
+
+  bool operator()(uint8_t row, uint8_t column) const;
+
   uint8_t rows() const;
   uint8_t cols() const;
   std::vector<bool> data() const;
-    
-  bool operator()(uint8_t row, uint8_t column) const;
-    
+
+  Matrix operator+(const Matrix& rhs) const;
+  Matrix operator*(const Matrix& rhs) const;
+  Matrix operator+(const bool& rhs) const;
+  Matrix operator*(const bool& rhs) const;
+  Matrix operator!() const;
+
+  Matrix transpose() const;
+
 private:
-  std::vector<bool> _data;
-  uint8_t _numberOfRows;
-  uint8_t _numberOfColumns;
+  const uint8_t _rows;
+  const uint8_t _cols;
+  const std::vector<bool> _data;
 };
 
-std::ostream& operator<< (std::ostream &os, const Matrix& matrix);
-bool operator== (const Matrix& lhs, const Matrix& rhs);
+Matrix multiply(const Matrix& lhs, const Matrix& rhs);
 
+std::ostream& operator<<(std::ostream &os, const Matrix& rhs);
+bool operator==(const Matrix& lhs, const Matrix& rhs);
 }
