@@ -29,6 +29,7 @@
 
 # Build system
 *bazel-*
+*.bazel*
 
 # IDE
 *.vscode

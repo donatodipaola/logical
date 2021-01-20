@@ -1,83 +1,164 @@
 #include <boolmat.hpp>
 
+#include <algorithm>
+#include <iostream>
 
 namespace boolmat {
 
-Matrix::Matrix (uint8_t numberOfRows, uint8_t numberOfColumns) : 
-_numberOfRows (numberOfRows), 
-_numberOfColumns (numberOfColumns)
-{
-  _data.resize(_numberOfRows*_numberOfColumns);
-}
+Matrix::Matrix (uint8_t rows, uint8_t cols) : 
+_rows(rows), 
+_cols(cols),
+_data(std::vector<bool>(_rows*_cols,0))
+{}
 
-Matrix::Matrix (uint8_t numberOfRows, uint8_t numberOfColumns, const std::vector<bool>& data) : 
-_numberOfRows (numberOfRows), 
-_numberOfColumns (numberOfColumns),
+Matrix::Matrix (uint8_t rows, uint8_t cols, const std::vector<bool>& data) : 
+_rows(rows), 
+_cols(cols),
 _data(data)
 {
-  if(_numberOfRows*_numberOfColumns != _data.size())
+  if(_rows*_cols != _data.size())
   {
     throw std::out_of_range("Matrix indices and the data vector are not compatible");
   }
 }
 
-Matrix::Matrix(const std::initializer_list<std::initializer_list<bool>>& initializationList) 
-{
-  _numberOfRows = initializationList.size();
-  _numberOfColumns = initializationList.begin()->size();
-  for (auto row : initializationList)
-  {
-    std::copy(row.begin(), row.end(), std::back_inserter(_data));
-  }
-}
+Matrix::Matrix(const Matrix& rhs) :
+  _rows(rhs._rows),
+  _cols(rhs._cols),
+  _data(rhs._data)
+{}
 
-Matrix::Matrix(const Matrix& matrix) 
+bool Matrix::operator()(uint8_t row, uint8_t column) const
 {
-  _numberOfRows = matrix._numberOfRows;
-  _numberOfColumns = matrix._numberOfColumns;
-  _data = matrix._data;
-};
+  if (row >= _rows || column>= _cols)
+  {
+    throw std::out_of_range("Matrix indices out of range");
+  }
+  return _data[_cols*row + column];
+}
 
 uint8_t Matrix::rows() const
 {
-  return _numberOfRows;
+  return _rows;
 }
     
 uint8_t Matrix::cols() const
 {
-  return _numberOfColumns;
+  return _cols;
 }
 
 std::vector<bool> Matrix::data() const
 {
   return _data;
 }
-    
-bool Matrix::operator()(uint8_t row, uint8_t column) const
-{
-  if (row >= _numberOfRows || column>= _numberOfColumns)
+
+Matrix Matrix::operator+(const Matrix& rhs) const
+{     
+  if (rhs._rows != _rows || rhs._cols != _cols)
   {
-    throw std::out_of_range("matrix indices out of range");
+    throw std::range_error("Matrices have not the same size");
   }
-  return _data[_numberOfColumns*row + column];
+
+  std::vector<bool> data(_rows*_cols);
+  std::transform(_data.cbegin(), _data.cend(), rhs._data.cbegin(), data.begin(), std::plus<bool>());
+  
+  return Matrix(_rows,_cols,data); 
 }
 
-std::ostream& operator<< (std::ostream &os, const Matrix& matrix) 
+Matrix Matrix::operator*(const Matrix& rhs) const
+{     
+  if (rhs._rows != _rows || rhs._cols != _cols)
+  {
+    throw std::range_error("Matrices have not the same size");
+  }
+
+  std::vector<bool> data(_rows*_cols);
+  std::transform(_data.cbegin(), _data.cend(), rhs._data.cbegin(), data.begin(), std::multiplies<bool>());
+  
+  return Matrix(_rows,_cols,data); 
+}
+
+Matrix Matrix::operator+(const bool& rhs) const
+{     
+  std::vector<bool> data(_rows*_cols);
+  std::transform(_data.cbegin(),_data.cend(),data.begin(),[&rhs](const auto& dataValue){return dataValue+rhs;});
+
+  return Matrix(_rows,_cols,data); 
+}
+
+Matrix Matrix::operator*(const bool& rhs) const
+{     
+  std::vector<bool> data(_rows*_cols);
+  std::transform(_data.cbegin(),_data.cend(),data.begin(),[&rhs](const auto& dataValue){return dataValue*rhs;});
+
+  return Matrix(_rows,_cols,data); 
+}
+
+Matrix Matrix::operator!() const
 {
-    for (uint8_t i = 0; i < matrix.rows(); ++i)
+  std::vector<bool> data(_rows*_cols);
+  std::transform(_data.cbegin(),_data.cend(),data.begin(),[](const auto& dataValue){return !dataValue;});
+
+  return Matrix(_rows,_cols,data); 
+}
+
+Matrix Matrix::transpose() const
+{
+  std::vector<bool> data(_rows*_cols);
+  for (uint8_t i = 0; i < _cols; ++i)
+  {
+    for (uint8_t j = 0; j < _rows; ++j)
     {
-        for (uint8_t j = 0; j < matrix.cols(); ++j)
-            os <<  matrix(i,j) << " ";
-        os << std::endl;
+      data[j+_rows*i] = _data[_cols*j + i];
     }
-    return os;
+  }
+  return Matrix(_cols,_rows,data); 
 }
 
-bool operator== (const Matrix& lhs, const Matrix& rhs) 
+Matrix multiply(const Matrix& lhs, const Matrix& rhs)
 {
-    return  (lhs.rows() == rhs.rows()) and
-            (lhs.cols() == rhs.cols()) and
-            (lhs.data() == rhs.data());
+  if (lhs.cols() != rhs.rows())
+  {
+    throw std::range_error("Matrices have incompatible size");
+  }
+  std::vector<bool> data(lhs.rows()*rhs.cols());
+
+  for (uint8_t i = 0; i < lhs.rows(); ++i)
+  {
+    for (uint8_t j = 0; j < rhs.cols(); ++j)
+    {
+      for (uint8_t k = 0; k < rhs.rows(); ++k)
+      {
+        data[j+lhs.rows()*i] = data[j+lhs.rows()*i] + lhs(i,k)*rhs(k,j);
+      }
+    }
+  }
+  return Matrix(lhs.rows(),rhs.cols(),data); 
+}
+
+std::ostream& operator<< (std::ostream &os, const Matrix& rhs)
+{ 
+  os << std::endl;
+  for (uint8_t i = 0; i < rhs.rows(); ++i)
+  {
+    for (uint8_t j = 0; j < rhs.cols(); ++j)
+    {
+      os <<  rhs(i,j);
+      if(j != (rhs.cols() - 1))
+      {
+        os << " ";
+      }
+    }
+    os << std::endl;
+  }
+  return os;
+}
+
+bool operator== (const Matrix& lhs, const Matrix& rhs)
+{
+  return  (lhs.rows() == rhs.rows()) and
+          (lhs.cols() == rhs.cols()) and
+          (lhs.data() == rhs.data());
 }
 
 }
