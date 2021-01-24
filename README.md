@@ -2,7 +2,7 @@
 The aim of **boolmat** is to provide a lightweight library for Boolean matrices operations in modern C++ (C++17).
 
 
-##Table of Contents
+## Table of Contents
 
 - [Usage](#usage)
   * [Example](#example)
