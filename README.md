@@ -396,7 +396,7 @@ B =
 
 
 
-###Matrix multiplication
+### Matrix multiplication
 
 Given two matrices $A$ and $B$,  with the number of columns in the matrix $A$ equal to the number of rows in the matrix $B$ is possible to obtain the *matrix product* $AB$, which has the number of rows of $A$ and the number of columns of $B$, via the ```multiply``` function:
 
