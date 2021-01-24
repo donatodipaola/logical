@@ -1,7 +1,7 @@
 cc_library(
     name = "boolmat", 
-    srcs = glob(["src/*.cpp"]),
-    hdrs = glob(["include/*.hpp"]),
+    srcs = ["src/boolmat.cpp"],
+    hdrs = ["include/boolmat.hpp"],
     includes = ["include"],
     visibility = ["//visibility:public"],
 )
@@ -11,6 +11,14 @@ cc_test (
     srcs = glob(["test/*.cpp"]),
     deps = [
         "@gtest//:gtest",
+        "boolmat",
+    ],
+)
+
+cc_binary(
+    name = "boolmat_example",
+    srcs = ["src/example.cpp"],
+    deps = [
         "boolmat",
     ],
 )
