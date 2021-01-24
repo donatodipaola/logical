@@ -3,6 +3,12 @@ The aim of **boolmat** is to provide a lightweight library for Boolean matrices 
 
 
 
+##Table of Contents
+
+[TOC]
+
+
+
 ## Usage
 
 The **boolmat** library can be used in your project in three ways:
@@ -178,7 +184,7 @@ element =
 
 In case of a row or column index outside the matrix size an exception will be thrown.
 
-### Get Matrix internal data
+### Get matrix internal data
 
 The matrix internal data can be also extracted, as a ```std::vector<bool>```, by using the method ```data()```:
 
