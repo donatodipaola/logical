@@ -14,11 +14,3 @@ cc_test (
         "boolmat",
     ],
 )
-
-cc_binary(
-    name = "boolmat_example",
-    srcs = ["src/example.cpp"],
-    deps = [
-        "boolmat",
-    ],
-)
