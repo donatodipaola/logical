@@ -86,7 +86,7 @@ eval = 1
 
 ### Constructors
 
-Let us consider the general Boolean matrix $A \in \mathbb{B}^{n\times m}$, where $\mathbb{B}$ is the Boolean set {0, 1}, $n$ is the number of rows, and $m$ the number of columns. There are two ways to create a matrix: 
+Let us consider the general Boolean matrix ```A``` with ```n``` rows, and ```m``` columns. There are two ways to create a matrix: 
 
 1. The null-matrix constructor:
 
@@ -94,7 +94,7 @@ Let us consider the general Boolean matrix $A \in \mathbb{B}^{n\times m}$, where
 boolmat::Matrix A(3,2);
 ```
 
-which builds a matrix, of given rows and columns, with all elements equal to $0$:
+which builds a matrix, of given rows and columns, with all elements equal to ```0```:
 
 ```terminal
 A = 
@@ -160,7 +160,7 @@ A =
 
 ### Get matrix element
 
-You can get the value of a matrix element by using the function operator. Thus, the expression $A(i,j)$ is returning the element at the $i$-th row and $j$-th column:
+You can get the value of a matrix element by using the function operator. Thus, the expression ```A(i,j)``` is returning the element at the ```i```-th row and ```j```-th column:
 
 ```C++
 boolmat::Matrix A(2,2,{0,1,1,0});
@@ -375,7 +375,7 @@ false
 
 ### Transpose
 
-Given a matrix $A$ is possible to obtain its *transpose* $A^{T}$, which is obtained by switching the row and column indices of the matrix $A$, via the ```transpose``` method:
+Given a matrix ```A``` is possible to obtain its *transpose*, which is obtained by switching the row and column indices of the matrix ```A```, via the ```transpose``` method:
 
 ```C++
 boolmat::Matrix A(3,2,{0,0,1,1,0,1});
@@ -398,7 +398,7 @@ B =
 
 ### Matrix multiplication
 
-Given two matrices $A$ and $B$,  with the number of columns in the matrix $A$ equal to the number of rows in the matrix $B$ is possible to obtain the *matrix product* $AB$, which has the number of rows of $A$ and the number of columns of $B$, via the ```multiply``` function:
+Given two matrices ```A``` and ```B```,  with the number of columns in the matrix ```A``` equal to the number of rows in the matrix ```B``` is possible to obtain the *matrix product* ```AB```, which has the number of rows of ```A``` and the number of columns of ```B```, via the ```multiply``` function:
 
 ```C++
 boolmat::Matrix A(2,3,{1,0,0,1,0,0});
@@ -423,5 +423,6 @@ C =
 ```
 
 In case of the two matrices are not of compatible size an exception will be thrown.
+
 
 
