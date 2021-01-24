@@ -1,7 +1,6 @@
 #include <boolmat.hpp>
 
 #include <algorithm>
-#include <iostream>
 
 namespace boolmat {
 
@@ -121,7 +120,7 @@ Matrix multiply(const Matrix& lhs, const Matrix& rhs)
   {
     throw std::range_error("Matrices have incompatible size");
   }
-  std::vector<bool> data(lhs.rows()*rhs.cols());
+  std::vector<bool> data(lhs.rows()*rhs.cols(),0);
 
   for (uint8_t i = 0; i < lhs.rows(); ++i)
   {
@@ -129,7 +128,11 @@ Matrix multiply(const Matrix& lhs, const Matrix& rhs)
     {
       for (uint8_t k = 0; k < rhs.rows(); ++k)
       {
-        data[j+lhs.rows()*i] = data[j+lhs.rows()*i] + lhs(i,k)*rhs(k,j);
+        if(lhs(i,k) && rhs(k,j))
+        {
+          data[j+lhs.rows()*i] = 1;
+          break;
+        }
       }
     }
   }
