@@ -8,7 +8,7 @@ The aim of **boolmat** is to provide a lightweight library for Boolean matrices 
   * [Example](#example)
 - [Matrix creation and visualization](#matrix&#32;creation&#32;and&#32;visualization)
   * [Constructors](#constructors)
-  * [Stream operator](#stream&#32;operator)
+  * [Stream operator](#stream\ operator)
 - [Matrix data](#matrix&#32;data)
   * [Get matrix element](#get&#32;matrix&#32;element)
   * [Get matrix internal data](#get&#32;matrix&#32;internal&#32;data)
