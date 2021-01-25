@@ -1,6 +1,7 @@
 # logical
-The aim of **logical** is to provide a portable library for logical (Boolean) matrix algebra in modern C++ (C++17).
+The aim of **logical** is to provide a portable library for logical (Boolean) matrix algebra in modern C++.
 
+[![cppstd](https://img.shields.io/badge/C++-17-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B17)
 
 
 
