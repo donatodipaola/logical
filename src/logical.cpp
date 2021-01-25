@@ -1,3 +1,5 @@
+// MIT License  - Copyright (c) 2021 Donato Di Paola
+
 #include <logical.hpp>
 
 #include <algorithm>
@@ -52,7 +54,7 @@ std::vector<bool> Matrix::data() const
   return _data;
 }
 
-Matrix Matrix::operator+(const Matrix& rhs) const
+Matrix Matrix::operator+=(const Matrix& rhs) const
 {     
   if (rhs._rows != _rows || rhs._cols != _cols)
   {
@@ -65,7 +67,7 @@ Matrix Matrix::operator+(const Matrix& rhs) const
   return Matrix(_rows,_cols,data); 
 }
 
-Matrix Matrix::operator*(const Matrix& rhs) const
+Matrix Matrix::operator*=(const Matrix& rhs) const
 {     
   if (rhs._rows != _rows || rhs._cols != _cols)
   {
@@ -78,7 +80,7 @@ Matrix Matrix::operator*(const Matrix& rhs) const
   return Matrix(_rows,_cols,data); 
 }
 
-Matrix Matrix::operator+(const bool& rhs) const
+Matrix Matrix::operator+=(const bool& rhs) const
 {     
   std::vector<bool> data(_rows*_cols);
   std::transform(_data.cbegin(),_data.cend(),data.begin(),[&rhs](const auto& dataValue){return dataValue+rhs;});
@@ -86,7 +88,7 @@ Matrix Matrix::operator+(const bool& rhs) const
   return Matrix(_rows,_cols,data); 
 }
 
-Matrix Matrix::operator*(const bool& rhs) const
+Matrix Matrix::operator*=(const bool& rhs) const
 {     
   std::vector<bool> data(_rows*_cols);
   std::transform(_data.cbegin(),_data.cend(),data.begin(),[&rhs](const auto& dataValue){return dataValue*rhs;});
@@ -94,12 +96,37 @@ Matrix Matrix::operator*(const bool& rhs) const
   return Matrix(_rows,_cols,data); 
 }
 
-Matrix Matrix::operator!() const
+Matrix Matrix::operator~() const
 {
   std::vector<bool> data(_rows*_cols);
   std::transform(_data.cbegin(),_data.cend(),data.begin(),[](const auto& dataValue){return !dataValue;});
 
   return Matrix(_rows,_cols,data); 
+}
+
+Matrix Matrix::operator*(const Matrix& rhs) const
+{
+  if (_cols != rhs.rows())
+  {
+    throw std::range_error("Matrices have incompatible size");
+  }
+  std::vector<bool> data(_rows*rhs.cols(),0);
+
+  for (uint8_t i = 0; i < _rows; ++i)
+  {
+    for (uint8_t j = 0; j < rhs.cols(); ++j)
+    {
+      for (uint8_t k = 0; k < rhs.rows(); ++k)
+      {
+        if(_data[k + _cols*i]  && rhs(k,j))
+        {
+          data[j + _rows*i] = 1;
+          break;
+        }
+      }
+    }
+  }
+  return Matrix(_rows,rhs.cols(),data); 
 }
 
 Matrix Matrix::transpose() const
@@ -109,35 +136,10 @@ Matrix Matrix::transpose() const
   {
     for (uint8_t j = 0; j < _rows; ++j)
     {
-      data[j+_rows*i] = _data[_cols*j + i];
+      data[j + _rows*i] = _data[i + _cols*j];
     }
   }
   return Matrix(_cols,_rows,data); 
-}
-
-Matrix multiply(const Matrix& lhs, const Matrix& rhs)
-{
-  if (lhs.cols() != rhs.rows())
-  {
-    throw std::range_error("Matrices have incompatible size");
-  }
-  std::vector<bool> data(lhs.rows()*rhs.cols(),0);
-
-  for (uint8_t i = 0; i < lhs.rows(); ++i)
-  {
-    for (uint8_t j = 0; j < rhs.cols(); ++j)
-    {
-      for (uint8_t k = 0; k < rhs.rows(); ++k)
-      {
-        if(lhs(i,k) && rhs(k,j))
-        {
-          data[j+lhs.rows()*i] = 1;
-          break;
-        }
-      }
-    }
-  }
-  return Matrix(lhs.rows(),rhs.cols(),data); 
 }
 
 std::ostream& operator<< (std::ostream &os, const Matrix& rhs)

@@ -1,3 +1,6 @@
+// MIT License  - Copyright (c) 2021 Donato Di Paola
+
+#pragma once
 
 #include <vector>
 #include <ostream>
@@ -18,12 +21,13 @@ public:
   uint8_t cols() const;
   std::vector<bool> data() const;
 
-  Matrix operator+(const Matrix& rhs) const;
-  Matrix operator*(const Matrix& rhs) const;
-  Matrix operator+(const bool& rhs) const;
-  Matrix operator*(const bool& rhs) const;
-  Matrix operator!() const;
+  Matrix operator+=(const Matrix& rhs) const;
+  Matrix operator*=(const Matrix& rhs) const;
+  Matrix operator+=(const bool& rhs) const;
+  Matrix operator*=(const bool& rhs) const;
+  Matrix operator~() const;
 
+  Matrix operator*(const Matrix& rhs) const;
   Matrix transpose() const;
 
 private:

@@ -39,30 +39,31 @@ The **logical** library can be used in your project in three ways:
 #include <logical.hpp>
 
 int main() {
-  std::cout << "DeMorgan Law" << std::endl;
+  std::cout << "DeMorgan's Laws" << std::endl;
   
   logical::Matrix P(3,3,{0,0,1,0,1,1,1,0,0});
   logical::Matrix Q(3,3,{1,0,1,0,0,0,1,1,1});
   
-  bool rule1 = ((!(P+Q)) == (!P) * (!Q));
-  bool rule2 = ((!(P*Q)) == (!P) + (!Q));
+  bool rule1 = (~(P+=Q)) == ((~P) *= (~Q));
+  bool rule2 = (~(P*=Q)) == ((~P) += (~Q))
     
   std::cout << "P =" << P << std::endl;
   std::cout << "Q =" << Q << std::endl;
-  std::cout << "rule1 = " << rule1 << std::endl;
-  std::cout << "rule2 = " << rule2 << std::endl << std::endl;
+  std::cout << "~(P+=Q)) == ((~P) *= (~Q) : eval = " << rule1 << std::endl;
+  std::cout << "~(P*=Q)) == ((~P) += (~Q) : eval = " << rule2 << std::endl ;
   
   
+  std::cout << std::endl ;
   std::cout << "Transpose matrix property: (AB)^T = B^T A^T" << std::endl;
+
   logical::Matrix A(3,3,{0,0,1,0,1,1,1,0,0});
   logical::Matrix B(3,3,{1,0,1,0,0,0,1,1,1});
   
-  bool eval =
-    (logical::multiply(A,B).transpose() == logical::multiply(B.transpose(),A.transpose()));
+  bool eval = ((A * B).transpose() == B.transpose() * A.transpose());
   
   std::cout << "A =" << A << std::endl;
   std::cout << "B =" << B << std::endl;
-  std::cout << "eval = " << eval << std::endl;
+  std::cout << "(A * B).transpose() == B.transpose() * A.transpose() : eval = " << eval << std::endl;
   
   return 0;
 }

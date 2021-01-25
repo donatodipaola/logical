@@ -11,7 +11,7 @@ TEST(LogicalTestSuite, NullMatricConstructor_Success)
   uint8_t cols = 3;
   std::vector<bool> expecteData{0,0,0,0,0,0};
 
-  logical::Matrix A(rows,cols);
+  Matrix A(rows,cols);
 
   ASSERT_EQ(
     rows,
@@ -32,7 +32,7 @@ TEST(LogicalTestSuite, DataMatrixConstructor_Success)
   uint8_t cols = 2;
   std::vector<bool> data{1,0,1,0};
 
-  logical::Matrix A(rows,cols,data);
+  Matrix A(rows,cols,data);
 
   ASSERT_EQ(
     rows,
@@ -54,7 +54,7 @@ TEST(LogicalTestSuite, DataMatrixConstructor_ThrowsOutOfRange)
   std::vector<bool> data{1,0,1,0,1,0,1,0,1,0,1,0};
 
   ASSERT_THROW(
-    logical::Matrix A(rows,cols,data),
+    Matrix A(rows,cols,data),
     std::out_of_range);
 }
 
@@ -64,8 +64,8 @@ TEST(LogicalTestSuite, CopyConstructor_Success)
   uint8_t cols = 2;
   std::vector<bool> data{1,0,1,0};
 
-  logical::Matrix A(rows,cols,data);
-  logical::Matrix B(A);
+  Matrix A(rows,cols,data);
+  Matrix B(A);
 
   ASSERT_EQ(
     rows,
@@ -84,7 +84,7 @@ TEST(LogicalTestSuite, FunctionCallOperator_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
-  logical::Matrix A(rows,cols,{0,1,1,0});
+  Matrix A(rows,cols,{0,1,1,0});
 
   ASSERT_EQ(
     0,
@@ -100,7 +100,7 @@ TEST(LogicalTestSuite, GetNumberOfRows_Success)
   uint8_t rows = 2;
   uint8_t cols = 3;
   std::vector<bool> data = {0,1,1,0,1,0};
-  logical::Matrix A(rows,cols,data);
+  Matrix A(rows,cols,data);
 
   ASSERT_EQ(
     rows,
@@ -112,7 +112,7 @@ TEST(LogicalTestSuite, GetNumberOfColumns_Success)
   uint8_t rows = 2;
   uint8_t cols = 3;
   std::vector<bool> data = {0,1,1,0,1,0};
-  logical::Matrix A(rows,cols,data);
+  Matrix A(rows,cols,data);
 
   ASSERT_EQ(
     cols,
@@ -124,7 +124,7 @@ TEST(LogicalTestSuite, GetData_Success)
   uint8_t rows = 2;
   uint8_t cols = 3;
   std::vector<bool> data = {0,1,1,0,1,0};
-  logical::Matrix A(rows,cols,data);
+  Matrix A(rows,cols,data);
 
   ASSERT_EQ(
     data,
@@ -135,23 +135,23 @@ TEST(LogicalTestSuite, AdditionOperator_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
-  logical::Matrix A(rows,cols,{0,1,1,0});
-  logical::Matrix B(rows,cols,{1,0,0,1});
+  Matrix A(rows,cols,{0,1,1,0});
+  Matrix B(rows,cols,{1,0,0,1});
 
-  logical::Matrix C(rows,cols,{1,1,1,1});
+  Matrix C(rows,cols,{1,1,1,1});
 
   ASSERT_EQ(
     C,
-    A + B);
+    A += B);
 }
 
 TEST(LogicalTestSuite, AdditionOperator_ThrowsOutOfRange)
 {
-  logical::Matrix A(2,2);
-  logical::Matrix B(3,3);
+  Matrix A(2,2);
+  Matrix B(3,3);
 
   ASSERT_THROW(
-    A + B,
+    A += B,
     std::range_error);
 }
 
@@ -159,23 +159,23 @@ TEST(LogicalTestSuite, MultiplyOperator_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
-  logical::Matrix A(rows,cols,{0,1,1,0});
-  logical::Matrix B(rows,cols,{1,0,0,1});
+  Matrix A(rows,cols,{0,1,1,0});
+  Matrix B(rows,cols,{1,0,0,1});
 
-  logical::Matrix C(rows,cols);
+  Matrix C(rows,cols);
 
   ASSERT_EQ(
     C,
-    A * B);
+    A *= B);
 }
 
 TEST(LogicalTestSuite, MultiplyOperator_ThrowsOutOfRange)
 {
-  logical::Matrix A(2,2);
-  logical::Matrix B(3,3);
+  Matrix A(2,2);
+  Matrix B(3,3);
 
   ASSERT_THROW(
-    A * B,
+    A *= B,
     std::range_error);
 }
 
@@ -183,41 +183,69 @@ TEST(LogicalTestSuite, ElementAddOperator_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
-  logical::Matrix A(rows,cols,{0,1,1,0});
+  Matrix A(rows,cols,{0,1,1,0});
   bool value = 1;
 
-  logical::Matrix C(rows,cols,{1,1,1,1});
+  Matrix C(rows,cols,{1,1,1,1});
 
   ASSERT_EQ(
     C,
-    A + value);
+    A += value);
 }
 
 TEST(LogicalTestSuite, ElementMultplyOperator_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
-  logical::Matrix A(rows,cols,{0,1,1,0});
+  Matrix A(rows,cols,{0,1,1,0});
   bool value = 1;
 
-  logical::Matrix C(rows,cols,{0,1,1,0});
+  Matrix C(rows,cols,{0,1,1,0});
 
   ASSERT_EQ(
     C,
-    A * value);
+    A *= value);
 }
 
 TEST(LogicalTestSuite, ComplementOperator_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
-  logical::Matrix A(rows,cols,{0,1,1,0});
+  Matrix A(rows,cols,{0,1,1,0});
 
-  logical::Matrix C(rows,cols,{1,0,0,1});
+  Matrix C(rows,cols,{1,0,0,1});
 
   ASSERT_EQ(
     C,
-    !A);
+    ~A);
+}
+
+TEST(LogicalTestSuite, DeMorgansLaws_Success)
+{
+  Matrix P(3,3,{0,0,1,0,1,1,1,0,0});
+  Matrix Q(3,3,{1,0,1,0,0,0,1,1,1});
+  
+  
+  ASSERT_TRUE((~(P+=Q)) == ((~P) *= (~Q)));
+  ASSERT_TRUE((~(P*=Q)) == ((~P) += (~Q)));
+}
+
+
+TEST(LogicalTestSuite, Multiply_Success)
+{
+  uint8_t rowsA = 2;
+  uint8_t colsA = 3;
+  Matrix A(rowsA,colsA,{1,0,0,1,0,0});
+  
+  uint8_t rowsB = 3;
+  uint8_t colsB = 2;
+  Matrix B(rowsB,colsB,{1,0,1,1,0,1});
+
+  Matrix C(rowsA,colsB,{1,0,1,0});
+  
+  ASSERT_EQ(
+    C,
+    A * B);
 }
 
 TEST(LogicalTestSuite, TransposeVector_Success)
@@ -265,29 +293,19 @@ TEST(LogicalTestSuite, Transpose_Success)
     A.transpose());
 }
 
-TEST(LogicalTestSuite, Multiply_Success)
+TEST(LogicalTestSuite, TransposeProperty_Success)
 {
-  uint8_t rowsA = 2;
-  uint8_t colsA = 3;
-  Matrix A(rowsA,colsA,{1,0,0,1,0,0});
-  
-  uint8_t rowsB = 3;
-  uint8_t colsB = 2;
-  Matrix B(rowsB,colsB,{1,0,1,1,0,1});
-
-  Matrix C(rowsA,colsB,{1,0,1,0});
-  
-  ASSERT_EQ(
-    C,
-    multiply(A,B));
+  Matrix A(3,3,{0,0,1,0,1,1,1,0,0});
+  Matrix B(3,3,{1,0,1,0,0,0,1,1,1});
+ 
+  ASSERT_TRUE((A * B).transpose() == B.transpose() * A.transpose());
 }
-
 
 TEST(LogicalTestSuite, StreamInsertionOperator_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
-  logical::Matrix A(rows,cols,{0,1,1,0});
+  Matrix A(rows,cols,{0,1,1,0});
 
   std::string expectedOutput("\n0 1\n1 0\n");
 
@@ -303,11 +321,10 @@ TEST(LogicalTestSuite, EqualOperator_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
-  logical::Matrix A(rows,cols,{0,1,1,0});
-  logical::Matrix B(A);
+  Matrix A(rows,cols,{0,1,1,0});
+  Matrix B(A);
 
   ASSERT_TRUE(A==B);
 }
-
 
 }}
