@@ -130,15 +130,15 @@ eval = 1
 
 ### Constructors
 
-Let us consider the general Boolean matrix ```A``` with ```n``` rows, and ```m``` columns. There are two ways to create a matrix: 
+There are two ways to create a matrix. 
 
-1. The null-matrix constructor:
+1. The null-matrix constructor
 
 ```C++
 logical::Matrix A(3,2);
 ```
 
-which builds a matrix, of given rows and columns, with all elements equal to ```0```:
+builds a matrix, of given rows and columns, with all elements equal to ```0```:
 
 ```terminal
 A = 
@@ -147,13 +147,13 @@ A =
 0 0
 ```
 
-2. The data vector constructor:
+2. The list initialization constructor:
 
 ```C++
 logical::Matrix A(3,2,{0,0,1,1,0,1});
 ```
 
-which builds a matrix, of given rows and columns, with elements provided as a collections of boolean values, picked up as a sequence of rows:
+builds a matrix, of given rows and columns, with elements provided as a collection of boolean values in an initialization list:
 
 ```terminal
 A = 
@@ -240,7 +240,7 @@ data =
 0 1 1 0
 ```
 
-Complementary, the matrix dimensions can be obtained, by using the methods ```rows()``` and ```cols()```:
+In a complementary way, the matrix dimensions can be obtained by using the methods ```rows()``` and ```cols()```:
 
 ```C++
 logical::Matrix A(3,2,{0,0,1,1,0,1});
@@ -265,7 +265,7 @@ cols =
 
 ## Matrix operations
 
-The basic Boolean operators ```AND```, ```OR```, and ```NOT``` are possible between matrices or between a matrix and a scalar (Boolean) value. 
+The basic Boolean operators ```AND```, ```OR```, and ```NOT``` can be applied between matrices or between a matrix and a scalar (Boolean) value. 
 
 ### AND operator
 
@@ -419,7 +419,7 @@ false
 
 ### Transpose
 
-Given a matrix ```A``` is possible to obtain its *transpose*, which is obtained by switching the row and column indices of the matrix ```A```, via the ```transpose``` method:
+Given a matrix ```A``` is possible to obtain its *transpose*, which is obtained by switching the row and column indices of the matrix, via the ```transpose``` method:
 
 ```C++
 logical::Matrix A(3,2,{0,0,1,1,0,1});
