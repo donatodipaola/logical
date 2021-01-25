@@ -4,6 +4,7 @@ The aim of **logical** is to provide a portable library for logical (Boolean) ma
 
 
 
+
 ## Table of Contents
 
 - [Usage](#usage)
@@ -95,7 +96,7 @@ int main() {
 ```
 
 ```terminal
-DeMorgan Law
+DeMorgan's Laws
 P =
 0 0 1
 0 1 1
