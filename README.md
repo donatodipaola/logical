@@ -1,5 +1,5 @@
-# boolmat
-The aim of **boolmat** is to provide a library for Boolean matrices operations in modern C++ (C++17).
+# logical
+The aim of **logical** is to provide a library for logical (Boolean) matrix algebra in modern C++ (C++17).
 
 
 ## Table of Contents
@@ -24,7 +24,7 @@ The aim of **boolmat** is to provide a library for Boolean matrices operations i
 
 ## Usage
 
-The **boolmat** library can be used in your project in three ways:
+The **logical** library can be used in your project in three ways:
 
 1. As external dependency in Bazel, pointing at its git repository;
 2. Build and installed as library, then imported in your project;
@@ -36,13 +36,13 @@ The **boolmat** library can be used in your project in three ways:
 
 ```C++
 #include <iostream>
-#include <boolmat.hpp>
+#include <logical.hpp>
 
 int main() {
   std::cout << "DeMorgan Law" << std::endl;
   
-  boolmat::Matrix P(3,3,{0,0,1,0,1,1,1,0,0});
-  boolmat::Matrix Q(3,3,{1,0,1,0,0,0,1,1,1});
+  logical::Matrix P(3,3,{0,0,1,0,1,1,1,0,0});
+  logical::Matrix Q(3,3,{1,0,1,0,0,0,1,1,1});
   
   bool rule1 = ((!(P+Q)) == (!P) * (!Q));
   bool rule2 = ((!(P*Q)) == (!P) + (!Q));
@@ -54,11 +54,11 @@ int main() {
   
   
   std::cout << "Transpose matrix property: (AB)^T = B^T A^T" << std::endl;
-  boolmat::Matrix A(3,3,{0,0,1,0,1,1,1,0,0});
-  boolmat::Matrix B(3,3,{1,0,1,0,0,0,1,1,1});
+  logical::Matrix A(3,3,{0,0,1,0,1,1,1,0,0});
+  logical::Matrix B(3,3,{1,0,1,0,0,0,1,1,1});
   
   bool eval =
-    (boolmat::multiply(A,B).transpose() == boolmat::multiply(B.transpose(),A.transpose()));
+    (logical::multiply(A,B).transpose() == logical::multiply(B.transpose(),A.transpose()));
   
   std::cout << "A =" << A << std::endl;
   std::cout << "B =" << B << std::endl;
@@ -110,7 +110,7 @@ Let us consider the general Boolean matrix ```A``` with ```n``` rows, and ```m``
 1. The null-matrix constructor:
 
 ```C++
-boolmat::Matrix A(3,2);
+logical::Matrix A(3,2);
 ```
 
 which builds a matrix, of given rows and columns, with all elements equal to ```0```:
@@ -125,7 +125,7 @@ A =
 2. The data vector constructor:
 
 ```C++
-boolmat::Matrix A(3,2,{0,0,1,1,0,1});
+logical::Matrix A(3,2,{0,0,1,1,0,1});
 ```
 
 which builds a matrix, of given rows and columns, with elements provided as a collections of boolean values, picked up as a sequence of rows:
@@ -139,13 +139,13 @@ A =
 
 In case of mismatching between the matrix size and the length of the data collection provided an exception will be thrown.
 
-Matrices in **boolmat** are constant objects, the data of a matrix cannot be modified. Thus, a new matrix has to be created as input of a expression or can be created as result of matrix operations. 
+Matrices in **logical** are constant objects, the data of a matrix cannot be modified. Thus, a new matrix has to be created as input of a expression or can be created as result of matrix operations. 
 
 To create a matrix from an existing one, the copy constructor is provided:
 
 ```C++
-boolmat::Matrix A(3,2,{0,0,1,1,0,1});
-boolmat::Matrix B(A);
+logical::Matrix A(3,2,{0,0,1,1,0,1});
+logical::Matrix B(A);
 ```
 
 ```terminal
@@ -160,7 +160,7 @@ B =
 In order to visualize a matrix, the standard insertion stream operator is provided, so that the matrix can be sent to the console output:
 
 ```C++
-boolmat::Matrix A(3,2,{0,0,1,1,0,1});
+logical::Matrix A(3,2,{0,0,1,1,0,1});
 std::cout << "A =" << A; 
 ```
 
@@ -182,7 +182,7 @@ A =
 You can get the value of a matrix element by using the function operator. Thus, the expression ```A(i,j)``` is returning the element at the ```i```-th row and ```j```-th column:
 
 ```C++
-boolmat::Matrix A(2,2,{0,1,1,0});
+logical::Matrix A(2,2,{0,1,1,0});
 bool element = A(1,1);
 ```
 
@@ -202,7 +202,7 @@ In case of a row or column index outside the matrix size an exception will be th
 The matrix internal data can be also extracted, as a ```std::vector<bool>```, by using the method ```data()```:
 
 ```C++
-boolmat::Matrix A(2,2,{0,1,1,0});
+logical::Matrix A(2,2,{0,1,1,0});
 std::vector<bool> data = A.data();
 ```
 
@@ -218,7 +218,7 @@ data =
 Complementary, the matrix dimensions can be obtained, by using the methods ```rows()``` and ```cols()```:
 
 ```C++
-boolmat::Matrix A(3,2,{0,0,1,1,0,1});
+logical::Matrix A(3,2,{0,0,1,1,0,1});
 uint8_t rows = A.rows();
 uint8_t cols = A.cols();
 ```
@@ -247,10 +247,10 @@ The basic Boolean operators ```AND```, ```OR```, and ```NOT``` are possible betw
 The binary operator ```AND```, called also *logical conjunction*, is implemented via the ```*``` operator. In particular, the result of a logical conjunction of two matrices, element by element, can be obtained as: 
 
 ```C++
-boolmat::Matrix A(2,2,{0,1,1,0});
-boolmat::Matrix B(2,2,{1,0,0,1});
+logical::Matrix A(2,2,{0,1,1,0});
+logical::Matrix B(2,2,{1,0,0,1});
 
-boolmat::Matrix C = A * B;
+logical::Matrix C = A * B;
 ```
 
 ```terminal
@@ -272,10 +272,10 @@ In case of the two matrices are not of the same size an exception will be thrown
 Moreover, the logical conjunction of a matrix and a boolean value, element by element, can be obtained as: 
 
 ```C++
-boolmat::Matrix A(2,2,{0,1,1,0});
+logical::Matrix A(2,2,{0,1,1,0});
 bool b = 1;
 
-boolmat::Matrix C = A * b;
+logical::Matrix C = A * b;
 ```
 
 ```terminal
@@ -298,10 +298,10 @@ C =
 Similarly, the binary operator ```OR```, called also *logical disjunction*, is implemented via the ```+``` operator. In particular, the result of a logical disjunction of two matrices, element by element, can be obtained as: 
 
 ```C++
-boolmat::Matrix A(2,2,{0,1,1,0});
-boolmat::Matrix B(2,2,{1,0,0,1});
+logical::Matrix A(2,2,{0,1,1,0});
+logical::Matrix B(2,2,{1,0,0,1});
 
-boolmat::Matrix C = A + B;
+logical::Matrix C = A + B;
 ```
 
 ```terminal
@@ -323,10 +323,10 @@ In case of the two matrices are not of the same size an exception will be thrown
 Moreover, the logical conjunction of a matrix and a boolean value, element by element, can be obtained as: 
 
 ```C++
-boolmat::Matrix A(2,2,{0,1,1,0});
+logical::Matrix A(2,2,{0,1,1,0});
 bool b = 1;
 
-boolmat::Matrix C = A + b;
+logical::Matrix C = A + b;
 ```
 
 ```terminal
@@ -349,9 +349,9 @@ C =
 Furthermore, the unary operator ```NOT```, called also *logical complement*, is implemented via the ```!``` operator: 
 
 ```C++
-boolmat::Matrix A(2,2,{0,1,1,0});
+logical::Matrix A(2,2,{0,1,1,0});
 
-boolmat::Matrix B = !A;
+logical::Matrix B = !A;
 ```
 
 ```terminal
@@ -371,8 +371,8 @@ B =
 In order to test the equality between two matrices the equal operator ```==``` is provided:
 
 ```C++
-boolmat::Matrix A(2,2,{0,1,1,0});
-boolmat::Matrix B(2,2,{1,0,1,0});
+logical::Matrix A(2,2,{0,1,1,0});
+logical::Matrix B(2,2,{1,0,1,0});
 
 bool result = A == B;
 ```
@@ -397,9 +397,9 @@ false
 Given a matrix ```A``` is possible to obtain its *transpose*, which is obtained by switching the row and column indices of the matrix ```A```, via the ```transpose``` method:
 
 ```C++
-boolmat::Matrix A(3,2,{0,0,1,1,0,1});
+logical::Matrix A(3,2,{0,0,1,1,0,1});
 
-boolmat::Matrix B = A.transpose();
+logical::Matrix B = A.transpose();
 ```
 
 ```terminal
@@ -420,10 +420,10 @@ B =
 Given two matrices ```A``` and ```B```,  with the number of columns in the matrix ```A``` equal to the number of rows in the matrix ```B``` is possible to obtain the *matrix product* ```AB```, which has the number of rows of ```A``` and the number of columns of ```B```, via the ```multiply``` function:
 
 ```C++
-boolmat::Matrix A(2,3,{1,0,0,1,0,0});
-boolmat::Matrix B(3,2,{1,0,1,1,0,1});
+logical::Matrix A(2,3,{1,0,0,1,0,0});
+logical::Matrix B(3,2,{1,0,1,1,0,1});
 
-boolmat::Matrix C = boolmat::multiply(A,B);
+logical::Matrix C = logical::multiply(A,B);
 ```
 
 ```terminal

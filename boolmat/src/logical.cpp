@@ -1,8 +1,9 @@
-#include <boolmat.hpp>
+#include <logical.hpp>
 
 #include <algorithm>
 
-namespace boolmat {
+
+namespace logical {
 
 Matrix::Matrix (uint8_t rows, uint8_t cols) : 
 _rows(rows), 

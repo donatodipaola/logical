@@ -3,7 +3,7 @@
 #include <ostream>
 
 
-namespace boolmat {
+namespace logical {
 
 class Matrix
 {
@@ -36,4 +36,5 @@ Matrix multiply(const Matrix& lhs, const Matrix& rhs);
 
 std::ostream& operator<<(std::ostream &os, const Matrix& rhs);
 bool operator==(const Matrix& lhs, const Matrix& rhs);
+
 }

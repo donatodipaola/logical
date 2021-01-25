@@ -1,17 +1,17 @@
 #include <gtest/gtest.h>
 
-#include <boolmat.hpp>
+#include <logical.hpp>
 
 
-namespace boolmat { namespace test {
+namespace logical { namespace test {
 
-TEST(BoolMatTestSuite, NullMatricConstructor_Success)
+TEST(LogicalTestSuite, NullMatricConstructor_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 3;
   std::vector<bool> expecteData{0,0,0,0,0,0};
 
-  boolmat::Matrix A(rows,cols);
+  logical::Matrix A(rows,cols);
 
   ASSERT_EQ(
     rows,
@@ -26,13 +26,13 @@ TEST(BoolMatTestSuite, NullMatricConstructor_Success)
     A.data());
 }
 
-TEST(BoolMatTestSuite, DataMatrixConstructor_Success)
+TEST(LogicalTestSuite, DataMatrixConstructor_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
   std::vector<bool> data{1,0,1,0};
 
-  boolmat::Matrix A(rows,cols,data);
+  logical::Matrix A(rows,cols,data);
 
   ASSERT_EQ(
     rows,
@@ -47,25 +47,25 @@ TEST(BoolMatTestSuite, DataMatrixConstructor_Success)
     A.data());
 }
 
-TEST(BoolMatTestSuite, DataMatrixConstructor_ThrowsOutOfRange)
+TEST(LogicalTestSuite, DataMatrixConstructor_ThrowsOutOfRange)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
   std::vector<bool> data{1,0,1,0,1,0,1,0,1,0,1,0};
 
   ASSERT_THROW(
-    boolmat::Matrix A(rows,cols,data),
+    logical::Matrix A(rows,cols,data),
     std::out_of_range);
 }
 
-TEST(BoolMatTestSuite, CopyConstructor_Success)
+TEST(LogicalTestSuite, CopyConstructor_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
   std::vector<bool> data{1,0,1,0};
 
-  boolmat::Matrix A(rows,cols,data);
-  boolmat::Matrix B(A);
+  logical::Matrix A(rows,cols,data);
+  logical::Matrix B(A);
 
   ASSERT_EQ(
     rows,
@@ -80,11 +80,11 @@ TEST(BoolMatTestSuite, CopyConstructor_Success)
     B.data());
 }
 
-TEST(BoolMatTestSuite, FunctionCallOperator_Success)
+TEST(LogicalTestSuite, FunctionCallOperator_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
-  boolmat::Matrix A(rows,cols,{0,1,1,0});
+  logical::Matrix A(rows,cols,{0,1,1,0});
 
   ASSERT_EQ(
     0,
@@ -95,132 +95,132 @@ TEST(BoolMatTestSuite, FunctionCallOperator_Success)
     A(0,1));
 }
 
-TEST(BoolMatTestSuite, GetNumberOfRows_Success)
+TEST(LogicalTestSuite, GetNumberOfRows_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 3;
   std::vector<bool> data = {0,1,1,0,1,0};
-  boolmat::Matrix A(rows,cols,data);
+  logical::Matrix A(rows,cols,data);
 
   ASSERT_EQ(
     rows,
     A.rows());
 }
 
-TEST(BoolMatTestSuite, GetNumberOfColumns_Success)
+TEST(LogicalTestSuite, GetNumberOfColumns_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 3;
   std::vector<bool> data = {0,1,1,0,1,0};
-  boolmat::Matrix A(rows,cols,data);
+  logical::Matrix A(rows,cols,data);
 
   ASSERT_EQ(
     cols,
     A.cols());
 }
 
-TEST(BoolMatTestSuite, GetData_Success)
+TEST(LogicalTestSuite, GetData_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 3;
   std::vector<bool> data = {0,1,1,0,1,0};
-  boolmat::Matrix A(rows,cols,data);
+  logical::Matrix A(rows,cols,data);
 
   ASSERT_EQ(
     data,
     A.data());
 }
 
-TEST(BoolMatTestSuite, AdditionOperator_Success)
+TEST(LogicalTestSuite, AdditionOperator_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
-  boolmat::Matrix A(rows,cols,{0,1,1,0});
-  boolmat::Matrix B(rows,cols,{1,0,0,1});
+  logical::Matrix A(rows,cols,{0,1,1,0});
+  logical::Matrix B(rows,cols,{1,0,0,1});
 
-  boolmat::Matrix C(rows,cols,{1,1,1,1});
+  logical::Matrix C(rows,cols,{1,1,1,1});
 
   ASSERT_EQ(
     C,
     A + B);
 }
 
-TEST(BoolMatTestSuite, AdditionOperator_ThrowsOutOfRange)
+TEST(LogicalTestSuite, AdditionOperator_ThrowsOutOfRange)
 {
-  boolmat::Matrix A(2,2);
-  boolmat::Matrix B(3,3);
+  logical::Matrix A(2,2);
+  logical::Matrix B(3,3);
 
   ASSERT_THROW(
     A + B,
     std::range_error);
 }
 
-TEST(BoolMatTestSuite, MultiplyOperator_Success)
+TEST(LogicalTestSuite, MultiplyOperator_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
-  boolmat::Matrix A(rows,cols,{0,1,1,0});
-  boolmat::Matrix B(rows,cols,{1,0,0,1});
+  logical::Matrix A(rows,cols,{0,1,1,0});
+  logical::Matrix B(rows,cols,{1,0,0,1});
 
-  boolmat::Matrix C(rows,cols);
+  logical::Matrix C(rows,cols);
 
   ASSERT_EQ(
     C,
     A * B);
 }
 
-TEST(BoolMatTestSuite, MultiplyOperator_ThrowsOutOfRange)
+TEST(LogicalTestSuite, MultiplyOperator_ThrowsOutOfRange)
 {
-  boolmat::Matrix A(2,2);
-  boolmat::Matrix B(3,3);
+  logical::Matrix A(2,2);
+  logical::Matrix B(3,3);
 
   ASSERT_THROW(
     A * B,
     std::range_error);
 }
 
-TEST(BoolMatTestSuite, ElementAddOperator_Success)
+TEST(LogicalTestSuite, ElementAddOperator_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
-  boolmat::Matrix A(rows,cols,{0,1,1,0});
+  logical::Matrix A(rows,cols,{0,1,1,0});
   bool value = 1;
 
-  boolmat::Matrix C(rows,cols,{1,1,1,1});
+  logical::Matrix C(rows,cols,{1,1,1,1});
 
   ASSERT_EQ(
     C,
     A + value);
 }
 
-TEST(BoolMatTestSuite, ElementMultplyOperator_Success)
+TEST(LogicalTestSuite, ElementMultplyOperator_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
-  boolmat::Matrix A(rows,cols,{0,1,1,0});
+  logical::Matrix A(rows,cols,{0,1,1,0});
   bool value = 1;
 
-  boolmat::Matrix C(rows,cols,{0,1,1,0});
+  logical::Matrix C(rows,cols,{0,1,1,0});
 
   ASSERT_EQ(
     C,
     A * value);
 }
 
-TEST(BoolMatTestSuite, ComplementOperator_Success)
+TEST(LogicalTestSuite, ComplementOperator_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
-  boolmat::Matrix A(rows,cols,{0,1,1,0});
+  logical::Matrix A(rows,cols,{0,1,1,0});
 
-  boolmat::Matrix C(rows,cols,{1,0,0,1});
+  logical::Matrix C(rows,cols,{1,0,0,1});
 
   ASSERT_EQ(
     C,
     !A);
 }
 
-TEST(BoolMatTestSuite, TransposeVector_Success)
+TEST(LogicalTestSuite, TransposeVector_Success)
 {
   uint8_t rowsA = 1;
   uint8_t colsA = 4;
@@ -235,7 +235,7 @@ TEST(BoolMatTestSuite, TransposeVector_Success)
     A.transpose());
 }
 
-TEST(BoolMatTestSuite, TransposeSquare_Success)
+TEST(LogicalTestSuite, TransposeSquare_Success)
 {
   uint8_t rowsA = 2;
   uint8_t colsA = 2;
@@ -250,7 +250,7 @@ TEST(BoolMatTestSuite, TransposeSquare_Success)
     A.transpose());
 }
 
-TEST(BoolMatTestSuite, Transpose_Success)
+TEST(LogicalTestSuite, Transpose_Success)
 {
   uint8_t rowsA = 2;
   uint8_t colsA = 3;
@@ -265,7 +265,7 @@ TEST(BoolMatTestSuite, Transpose_Success)
     A.transpose());
 }
 
-TEST(BoolMatTestSuite, Multiply_Success)
+TEST(LogicalTestSuite, Multiply_Success)
 {
   uint8_t rowsA = 2;
   uint8_t colsA = 3;
@@ -283,11 +283,11 @@ TEST(BoolMatTestSuite, Multiply_Success)
 }
 
 
-TEST(BoolMatTestSuite, StreamInsertionOperator_Success)
+TEST(LogicalTestSuite, StreamInsertionOperator_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
-  boolmat::Matrix A(rows,cols,{0,1,1,0});
+  logical::Matrix A(rows,cols,{0,1,1,0});
 
   std::string expectedOutput("\n0 1\n1 0\n");
 
@@ -299,12 +299,12 @@ TEST(BoolMatTestSuite, StreamInsertionOperator_Success)
     outputstream.str());
 }
 
-TEST(BoolMatTestSuite, EqualOperator_Success)
+TEST(LogicalTestSuite, EqualOperator_Success)
 {
   uint8_t rows = 2;
   uint8_t cols = 2;
-  boolmat::Matrix A(rows,cols,{0,1,1,0});
-  boolmat::Matrix B(A);
+  logical::Matrix A(rows,cols,{0,1,1,0});
+  logical::Matrix B(A);
 
   ASSERT_TRUE(A==B);
 }
