@@ -1,5 +1,7 @@
 # logical
-The aim of **logical** is to provide a library for logical (Boolean) matrix algebra in modern C++ (C++17).
+The aim of **logical** is to provide a portable library for logical (Boolean) matrix algebra in modern C++ (C++17).
+
+
 
 
 ## Table of Contents
@@ -24,15 +26,38 @@ The aim of **logical** is to provide a library for logical (Boolean) matrix alge
 
 ## Usage
 
-The **logical** library can be used in your project in three ways:
+The **logical** library can be used in two ways:
 
-1. As external dependency in Bazel, pointing at its git repository;
-2. Build and installed as library, then imported in your project;
-3. Copied and included in your project.
+0. Copy the header file and include it in your project;
+1. Add the library as dependency in your Bazel-based project:
+
+**Bazel**
+
+Add the repository as source in your ```WORKSPACE``` file
+```Starlark
+git_repository(
+    name = "logical",
+    remote = "https://github.com/donatodipaola/logical",
+    branch = "main"
+)
+```
+and then in the ```BUILD``` file of the component that uses the library
+```Starlark
+cc_binary(
+    name = "yourproject",
+    srcs = ["src/YourProject.cpp"],
+    deps = [
+         "@logical//:logical",
+    ],
+)
+...
+```
 
 
 
 ### Example
+
+Here an example of the use of the library and the output produced.
 
 ```C++
 #include <iostream>
@@ -52,7 +77,7 @@ int main() {
   std::cout << "~(P+=Q)) == ((~P) *= (~Q) : eval = " << rule1 << std::endl;
   std::cout << "~(P*=Q)) == ((~P) += (~Q) : eval = " << rule2 << std::endl ;
   
-  
+
   std::cout << std::endl ;
   std::cout << "Transpose matrix property: (AB)^T = B^T A^T" << std::endl;
 
@@ -68,8 +93,6 @@ int main() {
   return 0;
 }
 ```
-
-Output:
 
 ```terminal
 DeMorgan Law
@@ -245,13 +268,13 @@ The basic Boolean operators ```AND```, ```OR```, and ```NOT``` are possible betw
 
 ### AND operator
 
-The binary operator ```AND```, called also *logical conjunction*, is implemented via the ```*``` operator. In particular, the result of a logical conjunction of two matrices, element by element, can be obtained as: 
+The binary operator ```AND```, called also *logical conjunction*, is implemented via the ```*=``` operator. In particular, the result of a logical conjunction of two matrices, element-wise, can be obtained as: 
 
 ```C++
 logical::Matrix A(2,2,{0,1,1,0});
 logical::Matrix B(2,2,{1,0,0,1});
 
-logical::Matrix C = A * B;
+logical::Matrix C = A *= B;
 ```
 
 ```terminal
@@ -270,13 +293,13 @@ C =
 
 In case of the two matrices are not of the same size an exception will be thrown.
 
-Moreover, the logical conjunction of a matrix and a boolean value, element by element, can be obtained as: 
+Moreover, the logical conjunction of a matrix and a boolean value, element-wise, can be obtained as: 
 
 ```C++
 logical::Matrix A(2,2,{0,1,1,0});
 bool b = 1;
 
-logical::Matrix C = A * b;
+logical::Matrix C = A *= b;
 ```
 
 ```terminal
@@ -296,13 +319,13 @@ C =
 
 ### OR operator
 
-Similarly, the binary operator ```OR```, called also *logical disjunction*, is implemented via the ```+``` operator. In particular, the result of a logical disjunction of two matrices, element by element, can be obtained as: 
+Similarly, the binary operator ```OR```, called also *logical disjunction*, is implemented via the ```+=``` operator. In particular, the result of a logical disjunction of two matrices, element-wise, can be obtained as: 
 
 ```C++
 logical::Matrix A(2,2,{0,1,1,0});
 logical::Matrix B(2,2,{1,0,0,1});
 
-logical::Matrix C = A + B;
+logical::Matrix C = A += B;
 ```
 
 ```terminal
@@ -321,13 +344,13 @@ C =
 
 In case of the two matrices are not of the same size an exception will be thrown.
 
-Moreover, the logical conjunction of a matrix and a boolean value, element by element, can be obtained as: 
+Moreover, the logical conjunction of a matrix and a boolean value, element-wise, can be obtained as: 
 
 ```C++
 logical::Matrix A(2,2,{0,1,1,0});
 bool b = 1;
 
-logical::Matrix C = A + b;
+logical::Matrix C = A += b;
 ```
 
 ```terminal
@@ -347,12 +370,12 @@ C =
 
 ### NOT operator
 
-Furthermore, the unary operator ```NOT```, called also *logical complement*, is implemented via the ```!``` operator: 
+Furthermore, the unary operator ```NOT```, called also *logical complement*, is implemented via the ```~``` operator: 
 
 ```C++
 logical::Matrix A(2,2,{0,1,1,0});
 
-logical::Matrix B = !A;
+logical::Matrix B = ~A;
 ```
 
 ```terminal
@@ -418,13 +441,13 @@ B =
 
 ### Matrix multiplication
 
-Given two matrices ```A``` and ```B```,  with the number of columns in the matrix ```A``` equal to the number of rows in the matrix ```B``` is possible to obtain the *matrix product* ```AB```, which has the number of rows of ```A``` and the number of columns of ```B```, via the ```multiply``` function:
+Given two matrices ```A``` and ```B```,  with the number of columns in the matrix ```A``` equal to the number of rows in the matrix ```B``` is possible to obtain the *matrix product* ```A * B```, which has the number of rows of ```A``` and the number of columns of ```B```, via the ```*``` operator:
 
 ```C++
 logical::Matrix A(2,3,{1,0,0,1,0,0});
 logical::Matrix B(3,2,{1,0,1,1,0,1});
 
-logical::Matrix C = logical::multiply(A,B);
+logical::Matrix C = A * B;
 ```
 
 ```terminal
@@ -443,6 +466,4 @@ C =
 ```
 
 In case of the two matrices are not of compatible size an exception will be thrown.
-
-
 
