@@ -1,16 +1,15 @@
 cc_library(
-    name = "boolmat", 
-    srcs = ["src/boolmat.cpp"],
-    hdrs = ["include/boolmat.hpp"],
+    name = "logical", 
+    hdrs = ["include/logical.hpp"],
     includes = ["include"],
     visibility = ["//visibility:public"],
 )
 
 cc_test (
-    name = "boolmat_test",
+    name = "logical_test",
     srcs = glob(["test/*.cpp"]),
     deps = [
         "@gtest//:gtest",
-        "boolmat",
+        "logical",
     ],
 )
